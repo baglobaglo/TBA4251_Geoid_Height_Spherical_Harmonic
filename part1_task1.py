@@ -34,38 +34,63 @@ def J_hat_N_n(n):
 def norm_legendre_poly_part1(n, t):
     #we try to do this iterative instead of recursice, since recursive functions
     #in python can be very slow. This function handles cases where m = 0 and n >=2
-
     p_previous_0 = 1
-    p_previous_1 = t
+    p_previous_1 = t * math.sqrt(3)
     p = 0.0
 
     #using the recurison formula
     for i in range(2, n+1):
-        p = -math.sqrt((2*i+1)/(i))*((i-1)/(math.sqrt(2*i-3)) * p_previous_0 + t*(math.sqrt(2*i+1))/(i*math.sqrt(2*i-1))*p_previous_1)
+        p = (-(math.sqrt((2*i+1))/(i))*((i-1)/(math.sqrt(2*i-3))) *p_previous_0) + t*((math.sqrt(2*i+1))/(i))*(math.sqrt(2*i-1))*p_previous_1
         # update the previous two polynomials for the next iteration
         p_previous_0 = p_previous_1
         p_previous_1 = p
-
-    # compute the normalization factor
-    normalization_factor = math.sqrt((2*n+1)/(2*math.pi))
-    # normalize the polynomial and return
-    return p * normalization_factor
-print("hei hei")
-print(norm_legendre_poly_part1(2, math.sin(math.radians(63.446827))))
-print(norm_legendre_poly_part1(3, math.sin(math.radians(63.446827))))
-print(norm_legendre_poly_part1(4, math.sin(math.radians(63.446827))))
-print(norm_legendre_poly_part1(5, math.sin(math.radians(63.446827))))
+    return p
+#print(norm_legendre_poly_part1(2, math.sin(math.radians(63.0))))
 
 def norm_legendre_poly_part2(n, m, t):
+    #we try to do this next part iterative as well.
+    #this function handles cases where n >= 3 and 1<= m <= n-2
+    p_previous_0 = math.sqrt(3)*math.sqrt(1-t**2)
+    p_previous_1 = t*math.sqrt(15)*math.sqrt(1-t**2)
+    p_n_m = 0.0
+    for i, j in range(n, n+2):
+        n*m
     return
 
+def norm_legendre_poly_part3(n, m, t):
+    m = n - 1
+    #for cases where n>=1; m = n - 1
+    p_previous_0 = 1
+    p_previous_1 = math.sqrt(3)*math.sqrt(1-t**2)
+    p_n_n_minus1 = 0
+    for i in range(1, n+1):
+        p_n_n_minus1 = t*math.sqrt(2*i+1)*p_previous_0
+        p_previous_0 = p_previous_1
+        p_previous_1 = p_n_n_minus1
 
-def norm_legendre_poly_part3(n, t):
-    return
+    return p_n_n_minus1
+
+#print(norm_legendre_poly_part3(2, 0, math.sin(math.radians(63.0))))
 
 def norm_legendre_poly_part4(n, t):
+    # for cases where n>=2; m = n
+
+    p_previous_0 = 1
+    p_previous_1 = math.sqrt(3)*math.sqrt(1-t**2)
+    p_n_n = 0
+
+    for i in range(2, n+1):
+        p_n_n = math.sqrt((2*i+1)/(2*i))*math.sqrt(1-t**2)*p_previous_1
+        p_previous_0 = p_previous_1
+        p_previous_1 = p_n_n
+
+    return p_n_n
+
+#print(norm_legendre_poly_part4(2, math.sin(math.radians(63.0))))
+#print(norm_legendre_poly_part4(3, math.sin(math.radians(63.0))))
+#print(norm_legendre_poly_part4(4, math.sin(math.radians(63.0))))
+#print(norm_legendre_poly_part4(5, math.sin(math.radians(63.0))))
+
+
+def combine_all_legendre_poly(n, m, t):
     return
-
-
-
-
