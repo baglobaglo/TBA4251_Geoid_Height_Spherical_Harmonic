@@ -61,9 +61,9 @@ def S_q_nm(n,m):
 
 def R_nm(n,m):
     if(m == 0):
-        C_nm(n,m) - J_hat_N_n(n)
+        return C_nm(n,m) - J_hat_N_n(n)
     if(m != 0):
-        C_nm(n,m)
+        return C_nm(n,m)
 
 #Now, since we have a large function for the N_gravimetric function, we split it into different pieces
 #Inner sum
@@ -71,7 +71,11 @@ def R_nm(n,m):
 def N_gravimetric_inner_sum(n, longitude, P_legendre_poly):
     current_sum = 0
     for m in range(n+1):
-        print(f"n: {n}, m: {m}, R_bar: {R_nm(n,m)}, q_nm: {S_q_nm(n,m)}")
-        current_sum += (R_nm(n,m)*math.cos(math.radians(longitude)*m) + (S_q_nm(n,m)*math.sin(math.radians(longitude)*m)))*P_legendre_poly[(n, m)]
+        print(f"n: {n}, m: {m}, R_bar: {R_nm(n,m)}, q_nm: {S_q_nm(n,m)}, dic: {P_legendre_poly[(n, m)]}")
+        current_sum += (R_nm(n,m)*math.cos(m * math.radians(longitude)) + S_q_nm(n,m)*math.sin(math.radians(longitude)*m)) * P_legendre_poly[(n, m)]
     return current_sum
-print(N_gravimetric_inner_sum(40, 60, create_legendre_poly_dict(math.sin(math.radians(60)), 40)))
+#print(N_gravimetric_inner_sum(40, 60, create_legendre_poly_dict(0.5, 180)))
+#test = create_legendre_poly_dict(0.5, 180)
+#print(test[(40, 3)])
+
+
