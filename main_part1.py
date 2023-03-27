@@ -21,12 +21,9 @@ def J_hat_N_n(n):
     #if(n == 0): return "Try with a different n"
     if(n == 2): return J_hat_N_2
     if(n % 2 == 0):
-        return (-1)**(n/2)*((3*np.exp(n)*(1-(n/2)+(5/2)*(J_N_2 / np.exp(2))*n))/((n+1)*(n+3)*np.sqrt(2*n+1)))
+        return (-1)**(n/2)*((3*(math.sqrt(e_power_two)**n)*(1-(n/2)+(5/2)*(J_N_2 / e_power_two)*n))/((n+1)*(n+3)*np.sqrt(2*n+1)))
     else: return 0
 #print(J_hat_N_n(4))
-
-def N_gravimetric(R, latitude, longitude, N_max, m):
-    return #G*M/R*gamma
 
 #test1 = create_legendre_poly_dict(math.sin(math.radians(30.0)), 180)
 #print(test1[100, 89])
@@ -64,18 +61,42 @@ def R_nm(n,m):
         return C_nm(n,m) - J_hat_N_n(n)
     if(m != 0):
         return C_nm(n,m)
-
 #Now, since we have a large function for the N_gravimetric function, we split it into different pieces
 #Inner sum
 
 def N_gravimetric_inner_sum(n, longitude, P_legendre_poly):
     current_sum = 0
     for m in range(n+1):
-        print(f"n: {n}, m: {m}, R_bar: {R_nm(n,m)}, q_nm: {S_q_nm(n,m)}, dic: {P_legendre_poly[(n, m)]}")
         current_sum += (R_nm(n,m)*math.cos(m * math.radians(longitude)) + S_q_nm(n,m)*math.sin(math.radians(longitude)*m)) * P_legendre_poly[(n, m)]
     return current_sum
-#print(N_gravimetric_inner_sum(40, 60, create_legendre_poly_dict(0.5, 180)))
+#print(N_gravimetric_inner_sum(30, 20, create_legendre_poly_dict(0.5, 180)))
 #test = create_legendre_poly_dict(0.5, 180)
 #print(test[(40, 3)])
 
 
+def N_gravemetric_total_sum(latitude, longitude, n_max):
+    build_legendre_poly = create_legendre_poly_dict(math.sin(math.radians(latitude)), n_max)
+    outer_sum = 0
+    for i in range(2, n_max+1):
+        outer_sum += ((a/Radius)**i)*N_gravimetric_inner_sum(i, longitude, build_legendre_poly)
+    total_sum = (GM_gravitational_parameter/(Radius*gravity_small_gamma))*outer_sum
+    return total_sum
+
+print(N_gravemetric_total_sum(63, 10, GGM03S_model_NMAX))
+
+#Now we show the potensial results
+def calc_geoid_for_GGM03():
+    data = ['-90,-180.0,41.99','-90,-180.0,41.99','-90,-180.0,41.99','-90,-180.0,41.99']
+    #latitudes = np.linspace(-90, 90, 361)
+    #longitudes = np.linspace(-180, 180, 721)
+    latitudes = np.linspace(-90, 91, 5)
+    longitudes = np.linspace(-180, 181, 10)
+    for i in latitudes:
+        for j in longitudes:
+            print(i, j)
+            geoid_height_calculations = N_gravemetric_total_sum(i, j, GGM03S_model_NMAX)
+            data.append(str(i) + ',' + str(j) + ',' + str(geoid_height_calculations))
+    with open('geoid_calc.csv', 'w') as new_file:
+        new_file.write('\n'.join(data))
+
+#calc_geoid_for_GGM03()
