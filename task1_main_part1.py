@@ -1,4 +1,4 @@
-from part1_legendre_poly import create_legendre_poly_dict
+from task1_part1_legendre_poly import create_legendre_poly_dict
 import numpy as np
 import math
 import pandas as panda
