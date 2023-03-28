@@ -66,11 +66,11 @@ EGM2008_dataframe = panda.DataFrame(np.transpose(np.array([EGM2008_c, EGM2008_s]
 
 #Defining functions for C_nm and q_nm = S_nm
 def C_nm(n,m):
-    return EGM2008_dataframe.loc[n, m]["C"]
-    #return GGM03S_dataframe.loc[n,m]["C"]
+    #return EGM2008_dataframe.loc[n, m]["C"]
+    return GGM03S_dataframe.loc[n,m]["C"]
 def S_q_nm(n,m):
-    return EGM2008_dataframe.loc[n, m]["S"]
-    #return GGM03S_dataframe.loc[n,m]["S"]
+    #return EGM2008_dataframe.loc[n, m]["S"]
+    return GGM03S_dataframe.loc[n,m]["S"]
 
 def R_nm(n,m):
     if(m == 0):
@@ -98,7 +98,8 @@ def N_gravemetric_total_sum(latitude, longitude, n_max):
     total_sum = (GM_gravitational_parameter/(Radius*gravity_small_gamma))*outer_sum
     return total_sum
 
-print(N_gravemetric_total_sum(63, 10, EGM2008_model_NMAX))
+#Change to EGM2008_model_NMAX for EGM2008 model
+print(N_gravemetric_total_sum(63, 10, GGM03S_model_NMAX))
 
 
 #Now we show the potensial results
