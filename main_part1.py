@@ -3,6 +3,7 @@ import numpy as np
 import math
 import pandas as panda
 import pygmt as ptgmt
+from multiprocessing import Pool
 
 
 a = 6378137.0000 #m
@@ -29,7 +30,7 @@ def J_hat_N_n(n):
 #print(test1[100, 89])
 
 #Now we collect data from the different file(s)
-#####column_coefficents = ["n", "m", "C", "S"]
+
 #First model, GGM03S. Our variables is calles n, m, C and S
 #but in the model txt file it is listed as L, M ,C S
 GGM03S_model = panda.read_csv("./TBA4251_Geoid_Height_Spherical_Harmonic/data/GGM03S.txt", delim_whitespace=True, usecols=["L", "M", "C", "S"], index_col=False)
@@ -46,15 +47,30 @@ GGM03S_multiindex = panda.MultiIndex.from_arrays([GGM03S_n, GGM03S_m], names=["n
 
 #Now we create the dataframe, which is similar to SQL spreadsheet or dictionary
 GGM03S_dataframe= panda.DataFrame(np.transpose(np.array([GGM03S_c, GGM03S_s])), columns=["C", "S"], index = GGM03S_multiindex)
-
 #test1 = GGM03S_dataframe.loc[40, 0]["C"]
 #print(test1)
 
+#Now we collect data from EGM2008 (SGG-UGM-2)
+#Same as we did with GGM03S
+EGM2008_model = panda.read_csv("./TBA4251_Geoid_Height_Spherical_Harmonic/data/SGG-UGM-2.txt", delim_whitespace=True, usecols=["L", "M", "C", "S"], index_col=False)
+EGM2008_model_NMAX = 2190
+EGM2008_n = EGM2008_model["L"]
+EGM2008_m = EGM2008_model["M"]
+EGM2008_c = np.array(EGM2008_model["C"])
+EGM2008_s = np.array(EGM2008_model["S"])
+
+EGM2008_multiindex = panda.MultiIndex.from_arrays([EGM2008_n, EGM2008_m], names=["n", "m"])
+EGM2008_dataframe = panda.DataFrame(np.transpose(np.array([EGM2008_c, EGM2008_s])), columns=["C", "S"], index = EGM2008_multiindex)
+#test2 = EGM2008_dataframe.loc[10, 1]["C"]
+#print(test2)
+
 #Defining functions for C_nm and q_nm = S_nm
 def C_nm(n,m):
-    return GGM03S_dataframe.loc[n,m]["C"]
+    return EGM2008_dataframe.loc[n, m]["C"]
+    #return GGM03S_dataframe.loc[n,m]["C"]
 def S_q_nm(n,m):
-    return GGM03S_dataframe.loc[n,m]["S"]
+    return EGM2008_dataframe.loc[n, m]["S"]
+    #return GGM03S_dataframe.loc[n,m]["S"]
 
 def R_nm(n,m):
     if(m == 0):
@@ -69,7 +85,7 @@ def N_gravimetric_inner_sum(n, longitude, P_legendre_poly):
     for m in range(n+1):
         current_sum += (R_nm(n,m)*math.cos(m * math.radians(longitude)) + S_q_nm(n,m)*math.sin(math.radians(longitude)*m)) * P_legendre_poly[(n, m)]
     return current_sum
-#print(N_gravimetric_inner_sum(30, 20, create_legendre_poly_dict(0.5, 180)))
+#print(N_gravimetric_inner_sum(35, 20, create_legendre_poly_dict(0.5, 180)))
 #test = create_legendre_poly_dict(0.5, 180)
 #print(test[(40, 3)])
 
@@ -82,7 +98,8 @@ def N_gravemetric_total_sum(latitude, longitude, n_max):
     total_sum = (GM_gravitational_parameter/(Radius*gravity_small_gamma))*outer_sum
     return total_sum
 
-print(N_gravemetric_total_sum(63, 10, GGM03S_model_NMAX))
+print(N_gravemetric_total_sum(63, 10, EGM2008_model_NMAX))
+
 
 #Now we show the potensial results
 def calc_geoid_for_GGM03():
