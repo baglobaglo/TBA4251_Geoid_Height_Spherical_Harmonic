@@ -36,7 +36,7 @@ def create_legendre_poly_dict(sin_phi_t, n):
                 initial_legendre_poly[(i,j)] = sin_phi_t * math.sqrt(2*i + 1) * initial_legendre_poly[(i-1, i-1)]
     return initial_legendre_poly
 
-#build_it = create_legendre_poly_dict(0.5, 180)
+#build_it = create_legendre_poly_dict(0.5, 2190)
 #print(build_it[100, 89])
 
 

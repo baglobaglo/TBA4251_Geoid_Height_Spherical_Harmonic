@@ -1,23 +1,34 @@
 import pandas as panda
-import numpy as np
+from task1_main_part1 import N_gravemetric_total_sum
 
 geoid_model_norway = panda.read_csv("./TBA4251_Geoid_Height_Spherical_Harmonic/data/norway_geoid_height.txt", delim_whitespace=True, usecols=["Bredde", "Lengde", "H-orto", "H-ell", "Geoidehøgde"], index_col=False)
 geoid_model_norway_Bredde = geoid_model_norway["Bredde"]
 geoid_model_norway_Lengde = geoid_model_norway["Lengde"]
-geoid_model_norway_H_orto = np.array(geoid_model_norway["H-orto"])
-geoid_model_norway_H_ell = np.array(geoid_model_norway["H-ell"])
-geoid_model_norway_Geoidehoyde = np.array(geoid_model_norway["Geoidehøgde"])
 
-geoid_model_norway_multiindex = panda.MultiIndex.from_arrays([geoid_model_norway_Bredde, geoid_model_norway_Lengde], names=["Breddegrad", "Lengdegrad"])
-geoid_model_norway_dataframe = panda.DataFrame(np.transpose(np.array([geoid_model_norway_H_orto, geoid_model_norway_H_ell, geoid_model_norway_Geoidehoyde])), index=geoid_model_norway_multiindex)
+GGM03S_model_NMAX = 180
+EGM2008_model_NMAX = 2190
 
+def calc_geoid_for_Norway_GGM03():
+    data = ['latitude,longitude,geoidheight']
+    latitudes = geoid_model_norway_Bredde
+    longitudes = geoid_model_norway_Lengde
+    for i in range (len(geoid_model_norway_Bredde)):
+        print(latitudes[i], longitudes[i])
+        geoid_height_calculations = N_gravemetric_total_sum(latitudes[i], longitudes[i], GGM03S_model_NMAX)
+        data.append(str(latitudes[i]) + ',' + str(longitudes[i]) + ',' + str(geoid_height_calculations))
+    with open('GNSS_Norway_geoidheight_GGM03S.csv', 'w') as new_file:
+        new_file.write('\n'.join(data))
 
-#print(geoid_model_norway_dataframe.loc[61.6929259311394]["H-orto"])
-#print(geoid_model_norway_Bredde[0])
-#print(geoid_model_norway_H_orto[0])
+#Remember to change the formulas in main1_part1 before using it for EGM2008
+def calc_geoid_for_Norway_EGM2008():
+    data = ['latitude,longitude,geoidheight']
+    latitudes = geoid_model_norway_Bredde
+    longitudes = geoid_model_norway_Lengde
+    for i in range (len(geoid_model_norway_Bredde)):
+        print(latitudes[i], longitudes[i])
+        geoid_height_calculations = N_gravemetric_total_sum(latitudes[i], longitudes[i], EGM2008_model_NMAX)
+        data.append(str(latitudes[i]) + ',' + str(longitudes[i]) + ',' + str(geoid_height_calculations))
+    with open('GNSS_Norway_geoidheight_EGM2008.csv', 'w') as new_file:
+        new_file.write('\n'.join(data))
 
-def test123():
-    for i in range(3):
-        print(f"For breddegrad: + {geoid_model_norway_Bredde[i]} har vi denne geoidehøyden: {geoid_model_norway_H_ell[i] - geoid_model_norway_H_orto[i]}")
-
-test123()
+#calc_geoid_for_Norway_GGM03()
