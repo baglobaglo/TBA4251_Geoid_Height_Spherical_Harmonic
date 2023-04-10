@@ -32,3 +32,4 @@ def calc_geoid_for_Norway_EGM2008():
         new_file.write('\n'.join(data))
 
 #calc_geoid_for_Norway_GGM03()
+#calc_geoid_for_Norway_EGM2008()

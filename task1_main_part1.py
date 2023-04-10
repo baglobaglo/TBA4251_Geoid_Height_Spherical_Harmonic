@@ -145,5 +145,5 @@ def calc_geoid_for_EGM2008():
     with open('geoid_calc_scandinavia_EGM2008.csv', 'w') as new_file:
         new_file.write('\n'.join(data))
 
-#calc_geoid_for_GGM03()
+calc_geoid_for_GGM03()
 #calc_geoid_for_EGM2008()
