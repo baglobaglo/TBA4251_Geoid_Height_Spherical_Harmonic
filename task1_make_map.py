@@ -2,8 +2,8 @@ import pygmt as pygmt
 import pandas as pd
 #import numpy as np
 
+##region_sca = [-20, 40, 55, 73]
 region_sca = [-20, 40, 55, 70]
-
 
 data_file = pd.read_csv("geoid_calc_scandinavia_GGM03S.csv")
 #data_file = pd.read_csv("GNSS_Norway_geoidheight_GGM03S.csv")
