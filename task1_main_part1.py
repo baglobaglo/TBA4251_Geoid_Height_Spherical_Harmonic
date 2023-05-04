@@ -106,27 +106,25 @@ def N_gravemetric_total_sum(latitude, longitude, n_max):
 
 #Now we show the potensial results
 def calc_geoid_for_GGM03():
-    #data = ['-90,-180.0,41.99','-90,-180.0,41.99','-90,-180.0,41.99','-90,-180.0,41.99']
     data = ['latitude,longitude,geoidheight']
 
     #This is for the world
-    latitudes = np.linspace(-90, 90, 361)
-    longitudes = np.linspace(-180, 180, 721)
+    #latitudes = np.linspace(-90, 90, 361)
+    #longitudes = np.linspace(-180, 180, 721)
 
     #This is for scandinavia ++
-    #latitudes = np.linspace(55, 70, 31)
-    #longitudes = np.linspace(-20, 40, 121)
+    latitudes = np.linspace(55, 73, 37)
+    longitudes = np.linspace(-20, 40, 121)
 
     for i in latitudes:
         for j in longitudes:
             print(i, j)
             geoid_height_calculations = N_gravemetric_total_sum(i, j, GGM03S_model_NMAX)
             data.append(str(i) + ',' + str(j) + ',' + str(geoid_height_calculations))
-    with open('geoid_calc_world_GGM03S.csv', 'w') as new_file:
+    with open('geoid_calc_scandinacia_whole_Norway_GGM03S.csv', 'w') as new_file:
         new_file.write('\n'.join(data))
 
 def calc_geoid_for_EGM2008():
-    #data = ['-90,-180.0,41.99','-90,-180.0,41.99','-90,-180.0,41.99','-90,-180.0,41.99']
     data = ['latitude,longitude,geoidheight']
 
     #This is for the world
