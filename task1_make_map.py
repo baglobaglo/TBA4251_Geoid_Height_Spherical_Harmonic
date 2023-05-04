@@ -11,7 +11,7 @@ data_file = pd.read_csv("geoid_calc_scandinavia_whole_Norway_GGM03S.csv")
 latitudes = data_file["latitude"]
 longitudes = data_file["longitude"]
 elevations = data_file["geoidheight"]
-##
+####
 
 grid = pygmt.xyz2grd(
     x=longitudes,
