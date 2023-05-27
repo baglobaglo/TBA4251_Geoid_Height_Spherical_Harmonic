@@ -100,7 +100,7 @@ def N_gravemetric_total_sum(latitude, longitude, n_max):
     return total_sum
 
 #Change to EGM2008_model_NMAX for EGM2008 model
-print(N_gravemetric_total_sum(63, 10, EGM2008_model_NMAX))
+#print(N_gravemetric_total_sum(63, 10, EGM2008_model_NMAX))
 #print(N_gravemetric_total_sum(61.6929259311394, 5.1957949286442, GGM03S_model_NMAX))
 
 
@@ -144,4 +144,4 @@ def calc_geoid_for_EGM2008():
         new_file.write('\n'.join(data))
 
 #calc_geoid_for_GGM03()
-#calc_geoid_for_EGM2008()
+calc_geoid_for_EGM2008()
