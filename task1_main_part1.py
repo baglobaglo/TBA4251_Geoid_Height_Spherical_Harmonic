@@ -3,7 +3,7 @@ import numpy as np
 import math
 import pandas as panda
 import pygmt as pygmt
-from multiprocessing import Pool
+
 
 
 a = 6378137.0000 #m
@@ -66,11 +66,11 @@ EGM2008_dataframe = panda.DataFrame(np.transpose(np.array([EGM2008_c, EGM2008_s]
 
 #Defining functions for C_nm and q_nm = S_nm
 def C_nm(n,m):
-    return EGM2008_dataframe.loc[n, m]["C"]
-    #return GGM03S_dataframe.loc[n,m]["C"]
+    #return EGM2008_dataframe.loc[n, m]["C"]
+    return GGM03S_dataframe.loc[n,m]["C"]
 def S_q_nm(n,m):
-    return EGM2008_dataframe.loc[n, m]["S"]
-    #return GGM03S_dataframe.loc[n,m]["S"]
+    #return EGM2008_dataframe.loc[n, m]["S"]
+    return GGM03S_dataframe.loc[n,m]["S"]
 
 def R_nm(n,m):
     if(m == 0):
@@ -86,6 +86,10 @@ def N_gravimetric_inner_sum(n, longitude, P_legendre_poly):
         current_sum += (R_nm(n,m)*math.cos(m * math.radians(longitude)) + S_q_nm(n,m)*math.sin(math.radians(longitude)*m)) * P_legendre_poly[(n, m)]
     return current_sum
 
+
+
+
+################
 #print(N_gravimetric_inner_sum(35, 20, create_legendre_poly_dict(0.5, 2190)))
 #test = create_legendre_poly_dict(0.5, 180)
 #print(test[(40, 3)])
@@ -109,19 +113,19 @@ def calc_geoid_for_GGM03():
     data = ['latitude,longitude,geoidheight']
 
     #This is for the world
-    #latitudes = np.linspace(-90, 90, 361)
-    #longitudes = np.linspace(-180, 180, 721)
+    latitudes = np.linspace(-90, 90, 181)
+    longitudes = np.linspace(-180, 180, 361)
 
     #This is for scandinavia ++
-    latitudes = np.linspace(55, 73, 37)
-    longitudes = np.linspace(-20, 40, 121)
+    #latitudes = np.linspace(55, 73, 37)
+    #longitudes = np.linspace(-20, 40, 121)
 
     for i in latitudes:
         for j in longitudes:
             print(i, j)
             geoid_height_calculations = N_gravemetric_total_sum(i, j, GGM03S_model_NMAX)
             data.append(str(i) + ',' + str(j) + ',' + str(geoid_height_calculations))
-    with open('geoid_calc_scandinacia_whole_Norway_GGM03S.csv', 'w') as new_file:
+    with open('geoid_calc_whole_word_GGM03S.csv', 'w') as new_file:
         new_file.write('\n'.join(data))
 
 def calc_geoid_for_EGM2008():
@@ -143,5 +147,5 @@ def calc_geoid_for_EGM2008():
     with open('geoid_calc_scandinavia_whole_Norway_EGM2008.csv', 'w') as new_file:
         new_file.write('\n'.join(data))
 
-#calc_geoid_for_GGM03()
-calc_geoid_for_EGM2008()
+calc_geoid_for_GGM03()
+#calc_geoid_for_EGM2008()
