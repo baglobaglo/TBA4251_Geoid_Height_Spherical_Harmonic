@@ -66,11 +66,11 @@ EGM2008_dataframe = panda.DataFrame(np.transpose(np.array([EGM2008_c, EGM2008_s]
 
 #Defining functions for C_nm and q_nm = S_nm
 def C_nm(n,m):
-    #return EGM2008_dataframe.loc[n, m]["C"]
-    return GGM03S_dataframe.loc[n,m]["C"]
+    return EGM2008_dataframe.loc[n, m]["C"]
+    #return GGM03S_dataframe.loc[n,m]["C"]
 def S_q_nm(n,m):
-    #return EGM2008_dataframe.loc[n, m]["S"]
-    return GGM03S_dataframe.loc[n,m]["S"]
+    return EGM2008_dataframe.loc[n, m]["S"]
+    #return GGM03S_dataframe.loc[n,m]["S"]
 
 def R_nm(n,m):
     if(m == 0):
@@ -106,6 +106,7 @@ def N_gravemetric_total_sum(latitude, longitude, n_max):
 #Change to EGM2008_model_NMAX for EGM2008 model
 #print(N_gravemetric_total_sum(63, 10, EGM2008_model_NMAX))
 #print(N_gravemetric_total_sum(61.6929259311394, 5.1957949286442, GGM03S_model_NMAX))
+#print(N_gravemetric_total_sum(59.2096565871645, 5.1860451466737, EGM2008_model_NMAX))
 
 
 #Now we show the potensial results
@@ -147,5 +148,5 @@ def calc_geoid_for_EGM2008():
     with open('geoid_calc_scandinavia_whole_Norway_EGM2008.csv', 'w') as new_file:
         new_file.write('\n'.join(data))
 
-calc_geoid_for_GGM03()
+#calc_geoid_for_GGM03()
 #calc_geoid_for_EGM2008()
