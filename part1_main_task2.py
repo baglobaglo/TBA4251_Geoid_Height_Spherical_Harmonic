@@ -1,14 +1,18 @@
 import pandas as panda
-from task1_main_part1 import N_gravemetric_total_sum
+from part1_main_task1 import N_gravemetric_total_sum
 
+
+#Load the data from the file given in the assignment
 geoid_model_norway = panda.read_csv("./TBA4251_Geoid_Height_Spherical_Harmonic/data/norway_geoid_height.txt", delim_whitespace=True, usecols=["Bredde", "Lengde", "H-orto", "H-ell", "Geoidehøgde"], index_col=False)
 geoid_model_norway_Bredde = geoid_model_norway["Bredde"]
 geoid_model_norway_Lengde = geoid_model_norway["Lengde"]
 geoid_model_norway_geoid_height = geoid_model_norway["Geoidehøgde"]
 
+#Define model constants
 GGM03S_model_NMAX = 180
 EGM2008_model_NMAX = 2190
 
+#functions for calculating the geoid height for Norway
 def calc_geoid_for_Norway_GGM03():
     data = ['latitude,longitude,geoidheight']
     latitudes = geoid_model_norway_Bredde
@@ -33,6 +37,7 @@ def calc_geoid_for_Norway_EGM2008():
     with open('GNSS_Norway_geoidheight_EGM2008.csv', 'w') as new_file:
         new_file.write('\n'.join(data))
 
+#This function is used to get every other value from the file, becourse the file is too big to be used for my program
 def get_every_other_value():
     data = ['latitude,longitude,geoidheight']
     latitudes = geoid_model_norway_Bredde

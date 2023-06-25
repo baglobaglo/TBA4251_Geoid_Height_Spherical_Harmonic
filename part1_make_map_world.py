@@ -2,6 +2,9 @@ import pygmt as pygmt
 import pandas as pd
 #import numpy as np
 
+#This file uses pyGMT functionality to make a map of the world
+
+#define the region of the world
 region_sca = [-180, 180, -90, 90]
 data_file = pd.read_csv("geoid_calc_whole_word_GGM03S.csv")
 

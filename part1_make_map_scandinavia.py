@@ -1,7 +1,9 @@
 import pygmt as pygmt
 import pandas as pd
-#import numpy as np
 
+#This file uses pyGMT functionality to make a map of Scandinavia
+
+#define region
 region_sca = [-20, 40, 55, 73]
 ##region_sca = [-20, 40, 55, 70]
 ##region_sca = [-180, 180, -90, 90]

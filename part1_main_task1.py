@@ -1,10 +1,10 @@
-from task1_part1_legendre_poly import create_legendre_poly_dict
+from part1_legendre_poly import create_legendre_poly_dict
 import numpy as np
 import math
 import pandas as panda
 import pygmt as pygmt
 
-
+#define all the constants given in the task
 
 a = 6378137.0000 #m
 b = 6356752.3141 #m
@@ -29,7 +29,7 @@ def J_hat_N_n(n):
 #test1 = create_legendre_poly_dict(math.sin(math.radians(30.0)), 180)
 #print(test1[100, 89])
 
-#Now we collect data from the different file(s)
+#Now we collect data from the different gravity model file(s)
 
 #First model, GGM03S. Our variables is calles n, m, C and S
 #but in the model txt file it is listed as L, M ,C S
@@ -77,9 +77,9 @@ def R_nm(n,m):
         return C_nm(n,m) - J_hat_N_n(n)
     if(m != 0):
         return C_nm(n,m)
-#Now, since we have a large function for the N_gravimetric function, we split it into different pieces
-#Inner sum
 
+#Now, since we have a large function for the N_gravimetric function, we split it into different pieces
+#Inner sum, outer sum and total sum
 def N_gravimetric_inner_sum(n, longitude, P_legendre_poly):
     current_sum = 0
     for m in range(n+1):
@@ -103,13 +103,14 @@ def N_gravemetric_total_sum(latitude, longitude, n_max):
     total_sum = (GM_gravitational_parameter/(Radius*gravity_small_gamma))*outer_sum
     return total_sum
 
+#Test for the function(s)
 #Change to EGM2008_model_NMAX for EGM2008 model
 #print(N_gravemetric_total_sum(63, 10, EGM2008_model_NMAX))
 #print(N_gravemetric_total_sum(61.6929259311394, 5.1957949286442, GGM03S_model_NMAX))
 #print(N_gravemetric_total_sum(59.2096565871645, 5.1860451466737, EGM2008_model_NMAX))
 
 
-#Now we show the potensial results
+#Now we show the potensial results and write them to .csv files
 def calc_geoid_for_GGM03():
     data = ['latitude,longitude,geoidheight']
 
